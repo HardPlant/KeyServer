@@ -11,6 +11,7 @@ class ExchangeServer:
 
     def routine(self, sock):
         recv = sock.recv(1024)
+        print("[ExchangeServer] decrypt with pri..")
         msg = rsa.decrypt(recv,self.pri)
         unpacked_msg = packer.int_32_unpack(msg)
         print("Recv> " , unpacked_msg)

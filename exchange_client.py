@@ -11,6 +11,7 @@ class ExchangeClient:
     def handler(self, sock, *args):
         msg = args[0]
         packed = packer.int_32_pack(msg)
+        print("[ExchangeClient] encrypt with that_pub..")
         req = rsa.encrypt(packed, self.pub)
         sock.send(req)
 
