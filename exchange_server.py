@@ -1,23 +1,28 @@
 from TCPKit import TCPServer
 import rsa
-import struct
+import packer
 
-class ChatServer:
-    def __init__(self, port, sym):
+class ExchangeServer:
+    def __init__(self, port):
         self.port = port
         self.queue = []
         self.pubkey = []
-        self.sym = sym
+
+        (self.pub, self.pri) = rsa.newkeys(128)
+        print("Public.n: ", self.pub.n)
+        print("Public.e: ", self.pub.e)
 
     def routine(self, sock):
         recv = sock.recv(1024)
-        msg = recv.decode()
-        print("Recv> " , msg, end='')
+        msg = rsa.decrypt(recv,self.pri)
+        unpacked_msg = packer.int_32_unpack(msg)
+        print("Recv> " , unpacked_msg)
+        return unpacked_msg
 
     def serve(self):
         print("Server Running at port %d" % self.port)
         server = TCPServer.TCPServer(self.port, self.routine)
-        server.serve_forever()
+        return server.serve_once()
 
 
 def get_yes_or_no(msg):
@@ -31,9 +36,7 @@ def get_yes_or_no(msg):
 
 
 if __name__ == '__main__':
-    (pub, pri) = rsa.newkeys(32)
-    print("Public.n: ", pub.n)
-    print("Public.e: ", pub.e)
 
-    chatServer = ChatServer(12345)
-    chatServer.serve()
+    chatServer = ExchangeServer(12345)
+    key = chatServer.serve()
+    print("SymKey : ", key)

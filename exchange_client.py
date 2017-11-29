@@ -1,15 +1,17 @@
 import TCPKit.TCPClient as TCPClient
 import rsa
+import packer
 
 
-class ChatClient:
-    def __init__(self, port, sym):
+class ExchangeClient:
+    def __init__(self, port, pub):
         self.client = TCPClient.TCPClient("localhost", port, self.handler)
-        self.sym = sym
+        self.pub = pub
 
     def handler(self, sock, *args):
         msg = args[0]
-        req = bytes(msg, 'UTF-8')
+        packed = packer.int_32_pack(msg)
+        req = rsa.encrypt(packed, self.pub)
         sock.send(req)
 
     def send_message(self, msg):
@@ -18,14 +20,15 @@ class ChatClient:
 
 
 if __name__ == '__main__':
-    (pub, pri) = rsa.newkeys(32)
-    print("Public.n: ", pub.n)
-    print("Public.e: ", pub.e)
+    print("Enter Bob's Public.n:")
+    n = int(input())
+    print("Enter Bob's Public.e:")
+    e = int(input())
+    pub = rsa.PublicKey(n,e)
 
     port = 12345
-    chatClient = ChatClient(port)
+    chatClient = ExchangeClient(port, pub)
 
-    while True:
-        print('Send> ', end='')
-        msg = input()
-        chatClient.send_message(msg)
+    print('Send> ', end='')
+    msg = int(input())
+    chatClient.send_message(msg)
