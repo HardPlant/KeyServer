@@ -3,14 +3,11 @@ import rsa
 import packer
 
 class ExchangeServer:
-    def __init__(self, port):
+    def __init__(self, port, pri):
         self.port = port
         self.queue = []
         self.pubkey = []
-
-        (self.pub, self.pri) = rsa.newkeys(128)
-        print("Public.n: ", self.pub.n)
-        print("Public.e: ", self.pub.e)
+        self.pri = pri
 
     def routine(self, sock):
         recv = sock.recv(1024)
@@ -36,7 +33,10 @@ def get_yes_or_no(msg):
 
 
 if __name__ == '__main__':
+    (pub, pri) = rsa.newkeys(128)
+    print("Public.n: ", pub)
+    print("Public.e: ", pri)
 
-    chatServer = ExchangeServer(12345)
+    chatServer = ExchangeServer(12345, pri)
     key = chatServer.serve()
     print("SymKey : ", key)
