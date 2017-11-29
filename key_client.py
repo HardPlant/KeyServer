@@ -1,15 +1,37 @@
-import socket
+import TCPKit.TCPClient as TCPClient
+import struct
 
-class PublicKeyClient:
-    def __init__(self):
-        pass
 
-    def handler(self):
-        pass
+class KeyClient:
+    def __init__(self, port):
+        self.client = TCPClient.TCPClient("localhost", port, self.handler)
 
-    def get_public_key(self):
-        pass
+    def handler(self, sock, *args):
+        req = struct.pack('II', args[0], 0)
+        sock.send(req)
 
+        res = sock.recv(1024)
+        res, pub_key = struct.unpack('II', res)
+        print(res, ',', pub_key)
+
+        if id == res:
+            result = pub_key
+        else:
+            result = -1
+
+        return result
+
+    def get_pubkey(self, id):
+        result = []
+        self.client.run(id, result)
+        return result[0]
 
 if __name__ == '__main__':
-    pass
+    port = 12345
+    keyClient = KeyClient(port)
+
+    while True:
+        print('ID> ')
+        id = int(input())
+        pub_key = keyClient.get_pubkey(id)
+        print(pub_key)

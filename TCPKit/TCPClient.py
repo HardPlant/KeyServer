@@ -1,25 +1,28 @@
 import socket
 import threading
 
+
 class TCPClient:
     def __init__(self, dest, port, handler):
         self.dest = dest
         self.port = port
         self.handler = handler
 
-    def run(self, args=None):
+    def run(self, *args): # args[0] = result queue
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((self.dest, self.port))
+        print(args[1])
         t = threading.Thread(target=self.routine
-                             , args=(sock, self.handler, args))
+                             , args=(sock, self.handler, args[1], *args))
         t.start()
+        t.join()
 
-    def routine(self, socket, handler, args):
+    def routine(self, socket, handler, result, *args):
         try:
-            handler(socket, args)
+            result.append(handler(socket, *args))
         finally:
             socket.close()
 
-    def handler(self, socket, args=None):
+    def handler(self, socket, *args):
         pass
 
