@@ -2,10 +2,11 @@ from TCPKit import TCPServer
 import struct
 
 class ChatServer:
-    def __init__(self, port):
+    def __init__(self, port, sym):
         self.port = port
         self.queue = []
         self.pubkey = []
+        self.sym = sym
 
     def routine(self, sock):
         recv = sock.recv(1024)

@@ -1,8 +1,11 @@
 import TCPKit.TCPClient as TCPClient
+import rsa
+
 
 class ChatClient:
-    def __init__(self, port):
+    def __init__(self, port, sym):
         self.client = TCPClient.TCPClient("localhost", port, self.handler)
+        self.sym = sym
 
     def handler(self, sock, *args):
         msg = args[0]
