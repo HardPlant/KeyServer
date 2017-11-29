@@ -1,37 +1,24 @@
 import TCPKit.TCPClient as TCPClient
-import struct
-
 
 class ChatClient:
     def __init__(self, port):
         self.client = TCPClient.TCPClient("localhost", port, self.handler)
 
     def handler(self, sock, *args):
-        req = struct.pack('II', args[0], 0)
+        msg = args[0]
+        req = bytes(msg, 'UTF-8')
         sock.send(req)
 
-        res = sock.recv(1024)
-        res, pub_key = struct.unpack('II', res)
-        print(res, ',', pub_key)
+    def sendMessage(self, msg):
+        self.client.run(msg)
 
-        if id == res:
-            result = pub_key
-        else:
-            result = -1
-
-        return result
-
-    def get_pubkey(self, id):
-        result = []
-        self.client.run(id, result)
-        return result[0]
 
 if __name__ == '__main__':
     port = 12345
-    keyClient = ChatClient(port)
+    ChatClient = ChatClient(port)
 
     while True:
-        print('ID> ')
-        id = int(input())
-        pub_key = keyClient.get_pubkey(id)
+        print('Send Message> ')
+        msg = input()
+        keyClient.
         print(pub_key)

@@ -16,8 +16,11 @@ class TCPClient:
         t.start()
         t.join()
 
-    def routine(self, socket, handler, *args): # args[0] = result queue
-        result = args[1]
+    def routine(self, socket, handler, *args): # args[1] = result queue
+        if args == None :
+            result = []
+        else:
+            result = args[1]
         try:
             result.append(handler(socket, *args))
         finally:
