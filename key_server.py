@@ -36,7 +36,7 @@ class KeyServer:
 
 def get_yes_or_no(msg):
     while True:
-        print(msg)
+        print(msg, end='')
         ans = input()
         if ans.lower() == 'y':
             return True
@@ -45,11 +45,13 @@ def get_yes_or_no(msg):
 
 
 if __name__ == '__main__':
-    keyServer = KeyServer(12345)
+    print("키서버 포트: ", end='')
+    port = int(input())
+    keyServer = KeyServer(port)
     while get_yes_or_no("공개키를 등록하시겠습니까?"): # Register Status
-        print("등록할 아이디를 입력하십시오: ")
+        print("등록할 아이디를 입력하십시오: ", end='')
         id = int(input())
-        print("등록할 공개키를 입력하십시오: ")
+        print("등록할 공개키를 입력하십시오: ", end='')
         pubkey = int(input())
         keyServer.register(id,pubkey)
 

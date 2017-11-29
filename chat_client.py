@@ -19,6 +19,6 @@ if __name__ == '__main__':
     chatClient = ChatClient(port)
 
     while True:
-        print('Send Message> ')
+        print('Send> ', end='')
         msg = input()
         chatClient.send_message(msg)

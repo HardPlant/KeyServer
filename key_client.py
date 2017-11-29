@@ -14,9 +14,11 @@ class KeyClient:
         res, pub_key = struct.unpack('II', res)
         print(res, ',', pub_key)
 
-        if id == res:
+        if args[0] == res:
+            print("[Client] ACK")
             result = pub_key
         else:
+            print("[Client] NAK")
             result = -1
 
         return result

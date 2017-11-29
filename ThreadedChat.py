@@ -18,6 +18,18 @@ def chat_client_thread(port):
 
 
 if __name__ == '__main__':
+    key_client = KeyClient(34567)
+    while True:
+        print("상대 서버 id를 입력하세요: ")
+        that_id = int(input())
+        that_pubkey = key_client.get_pubkey(that_id)
+        print("결과: ", that_pubkey, 'type:', type(that_pubkey))
+        if that_pubkey != -1:
+            break
+        print("잘못된 id입니다.")
+
+    print("상대의 공개키: ", that_pubkey)
+
     print("채팅 서버 포트를 입력하세요: ")
     serve_port = int(input())
     server = threading.Thread(target=chat_server_thread

@@ -10,7 +10,7 @@ class ChatServer:
     def routine(self, sock):
         recv = sock.recv(1024)
         msg = recv.decode()
-        print("[Received] " , msg)
+        print("Recv> " , msg, end='')
 
     def serve(self):
         print("Server Running at port %d" % self.port)
