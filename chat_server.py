@@ -7,11 +7,12 @@ class ChatServer:
         self.queue = []
         self.pubkey = []
         self.sym = sym
+        print("[ChatServer] Sym_key :", sym)
 
     def routine(self, sock):
         recv = sock.recv(1024)
         msg = recv.decode()
-        print("Recv> " , msg, end='')
+        print("Recv> " , msg)
 
     def serve(self):
         print("Server Running at port %d" % self.port)

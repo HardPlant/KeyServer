@@ -6,6 +6,7 @@ class ChatClient:
     def __init__(self, port, sym):
         self.client = TCPClient.TCPClient("localhost", port, self.handler)
         self.sym = sym
+        print("[ChatClient] Sym_key :", sym)
 
     def handler(self, sock, *args):
         msg = args[0]

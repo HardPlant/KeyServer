@@ -15,7 +15,6 @@ def chat_server_thread(port, pri):
     exchange_server = ExchangeServer(port, pri)
     sym_key = exchange_server.serve()
     print("[Server] sym_key: ", sym_key)
-    return
 
     chat_server = ChatServer(port, sym_key)
     chat_server.serve()
@@ -26,11 +25,10 @@ def chat_client_thread(port, pub):
     sym_key = chat_client_gen_sym_key()
     print("[Client] sym_key: ", sym_key)
     exchange_client.send_message(sym_key)
-    return
 
     chat_client = ChatClient(port, sym_key)
     while True:
-        print('Send Message> ')
+        print('Send> ', end='')
         msg = input()
         chat_client.send_message(msg)
 
