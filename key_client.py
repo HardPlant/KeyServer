@@ -12,11 +12,15 @@ class KeyClient:
         sock.send(req)
 
         res = sock.recv(1024)
-        pub_key = packer.int_128_unpack(res)
-        print("[GetPublicKey] PubKey: ", pub_key)
+        pub_n = res[:16]
+        pub_e = res[16:]
+        pub_key = packer.int_128_unpack(pub_n)
+        pub_e = packer.int_32_unpack(pub_e)
+        print("[GetPublicKey] PubKey_n: ", pub_key)
+        print("[GetPublicKey] PubKey_e: ", pub_e)
 
         if res != 0:
-            result = pub_key
+            result = (pub_key, pub_e)
         else:
             result = -1
 
