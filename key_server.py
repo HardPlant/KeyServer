@@ -1,11 +1,25 @@
 from TCPKit import TCPServer
 import struct
+import rsa
+
 
 class KeyServer:
     def __init__(self, port):
         self.port = port
         self.queue = []
         self.pubkey = []
+        (pub, pri) = rsa.newkeys(32)
+        self.pub = pub
+        self.pri = pri
+        print("[Public key] N:", pub.n)
+        print("[Public key] e:", pub.e)
+
+    def get_server_public(self):
+        return self.pub
+
+    def get_server_pri(self):
+        return self.pri
+
 
     def routine(self, sock):
         recv = sock.recv(1024)
