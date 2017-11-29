@@ -1,5 +1,6 @@
 import TCPKit.TCPClient as TCPClient
 import struct
+import packer
 
 
 class KeyClient:
@@ -7,18 +8,16 @@ class KeyClient:
         self.client = TCPClient.TCPClient("localhost", port, self.handler)
 
     def handler(self, sock, *args):
-        req = struct.pack('II', args[0], 0)
+        req = struct.pack('I', args[0])
         sock.send(req)
 
         res = sock.recv(1024)
-        res, pub_key = struct.unpack('II', res)
-        print(res, ',', pub_key)
+        pub_key = packer.int_128_unpack(res)
+        print("[GetPublicKey] PubKey: ", pub_key)
 
-        if args[0] == res:
-            print("[Client] ACK")
+        if res != 0:
             result = pub_key
         else:
-            print("[Client] NAK")
             result = -1
 
         return result
