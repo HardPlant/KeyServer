@@ -3,32 +3,42 @@ from chat_server import ChatServer
 from exchange_server import ExchangeServer
 from exchange_client import ExchangeClient
 from key_client import KeyClient
+import packer
 import threading
 import rsa
 
+def chat_client_gen_sym_key():
+    return 65537
 
-def chat_server_thread(port,sym_key):
+def chat_server_thread(port, pri):
+    exchange_server = ExchangeServer(port, pri)
+    sym_key = exchange_server.serve()
+
     chat_server = ChatServer(port, sym_key)
     chat_server.serve()
 
-def chat_client_thread(port, sym_key):
+def chat_client_thread(port, pub):
+    exchange_client = ExchangeClient(port, pub)
+    sym_key = chat_client_gen_sym_key()
+    exchange_client.send_message(sym_key)
+
     chat_client = ChatClient(port, sym_key)
     while True:
         print('Send Message> ')
         msg = input()
         chat_client.send_message(msg)
 
-def phase_init_server_and_client():
+def phase_init_server_and_client(that_pub, this_pri):
     print("채팅 서버 포트를 입력하세요: ")
     serve_port = int(input())
     server = threading.Thread(target=chat_server_thread
-                              ,args=(serve_port,))
+                              ,args=(serve_port,this_pri))
     server.start()
 
     print("접속할 포트를 입력하세요: ")
     dest_port = int(input())
     client = threading.Thread(target=chat_client_thread
-                              ,args=(dest_port,))
+                              ,args=(dest_port,that_pub))
     client.start()
 
 def phase_get_key():
@@ -46,20 +56,12 @@ def phase_get_key():
 
     return that_pubkey
 
-def phase_exchange_sym_key(that_key):
-    pass
-
-
-def phase_chat(sym_key):
-    pass
 
 if __name__ == '__main__':
-    (pub, pri) = rsa.newkeys(128)
-    print("Public: ", pub)
+    (this_pub, this_pri) = rsa.newkeys(128)
+    print("Public: ", this_pub)
+    print("Private: ", this_pri)
 
-    phase_init_server_and_client()
-    that_key = phase_get_key()
-    sym_key = phase_exchange_sym_key(that_key)
-    phase_chat(sym_key)
-
+    that_pub = phase_get_key()
+    phase_init_server_and_client(this_pri, that_pub)
 
