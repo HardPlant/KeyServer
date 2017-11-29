@@ -2,7 +2,7 @@ import TCPKit.TCPClient as TCPClient
 import struct
 
 
-class KeyClient:
+class ChatClient:
     def __init__(self, port):
         self.client = TCPClient.TCPClient("localhost", port, self.handler)
 
@@ -28,7 +28,7 @@ class KeyClient:
 
 if __name__ == '__main__':
     port = 12345
-    keyClient = KeyClient(port)
+    keyClient = ChatClient(port)
 
     while True:
         print('ID> ')
