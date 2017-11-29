@@ -9,16 +9,16 @@ class ChatClient:
         req = bytes(msg, 'UTF-8')
         sock.send(req)
 
-    def sendMessage(self, msg):
-        self.client.run(msg)
+    def send_message(self, msg):
+        result = []
+        self.client.run(msg, result)
 
 
 if __name__ == '__main__':
     port = 12345
-    ChatClient = ChatClient(port)
+    chatClient = ChatClient(port)
 
     while True:
         print('Send Message> ')
         msg = input()
-        keyClient.
-        print(pub_key)
+        chatClient.send_message(msg)

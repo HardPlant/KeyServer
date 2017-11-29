@@ -8,7 +8,7 @@ class TCPClient:
         self.port = port
         self.handler = handler
 
-    def run(self, *args):
+    def run(self, *args): # args[1] must be result
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((self.dest, self.port))
         t = threading.Thread(target=self.routine
